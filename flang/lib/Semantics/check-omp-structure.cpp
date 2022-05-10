@@ -1813,7 +1813,6 @@ CHECK_REQ_SCALAR_INT_CLAUSE(NumTeams, OMPC_num_teams)
 CHECK_REQ_SCALAR_INT_CLAUSE(NumThreads, OMPC_num_threads)
 CHECK_REQ_SCALAR_INT_CLAUSE(Priority, OMPC_priority)
 CHECK_REQ_SCALAR_INT_CLAUSE(ThreadLimit, OMPC_thread_limit)
-CHECK_REQ_SCALAR_INT_CLAUSE(Device, OMPC_device)
 
 CHECK_REQ_CONSTANT_SCALAR_INT_CLAUSE(Collapse, OMPC_collapse)
 CHECK_REQ_CONSTANT_SCALAR_INT_CLAUSE(Safelen, OMPC_safelen)
@@ -2307,7 +2306,13 @@ void OmpStructureChecker::Enter(const parser::OmpClause::Schedule &x) {
     }
   }
 }
-
+void OmpStructureChecker::Enter(const parser::OmpClause::Device &x) {
+  CheckAllowed(llvm::omp::Clause::OMPC_device);
+  const parser::OmpDeviceClause &deviceClause = x.v;
+  const auto &device{std::get<1>(deviceClause.t)};
+  RequiresPositiveParameter(
+      llvm::omp::Clause::OMPC_device, device, "device expression");
+}
 void OmpStructureChecker::Enter(const parser::OmpClause::Depend &x) {
   CheckAllowed(llvm::omp::Clause::OMPC_depend);
   if (const auto *inOut{std::get_if<parser::OmpDependClause::InOut>(&x.v.u)}) {

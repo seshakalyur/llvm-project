@@ -522,6 +522,8 @@ public:
   NODE(OmpAllocateClause, Allocator)
   NODE(parser, OmpScheduleClause)
   NODE_ENUM(OmpScheduleClause, ScheduleType)
+  NODE(parser, OmpDeviceClause)
+  NODE_ENUM(OmpDeviceClause, DeviceModifier)
   NODE(parser, OmpScheduleModifier)
   NODE(OmpScheduleModifier, Modifier1)
   NODE(OmpScheduleModifier, Modifier2)
